@@ -1,0 +1,27 @@
+{
+  "name": "Winsnip-IBC-Wallet-Management",
+  "version": "1.0.0",
+  "description": "IBC Wallet Manager",
+  "main": "run.js",
+  "scripts": {
+    "start": "node run.js"
+  },
+  "author": "Winsnip",
+  "license": "MIT",
+  "dependencies": {
+    "@cosmjs/proto-signing": "^0.32.4",
+    "@cosmjs/stargate": "^0.32.4",
+    "base64-arraybuffer": "^1.0.2",
+    "bip39": "^3.1.0",
+    "dotenv": "^16.4.5",
+    "figlet": "^1.7.0",
+    "fs": "^0.0.1-security",
+    "getpass": "^0.1.7",
+    "randombytes": "^2.1.0",
+    "readline": "^1.3.0",
+    "readline-sync": "^1.4.10",
+    "unix": "0.0.0",
+    "winston": "^3.13.0",
+    "zlib": "^1.0.5"
+  }
+}
