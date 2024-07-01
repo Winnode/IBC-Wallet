@@ -13,6 +13,13 @@ A TypeScript script for managing Cosmos wallets, enabling transactions and walle
 
 1. **Node.js**: Ensure Node.js is installed. You can download it from [nodejs.org](https://nodejs.org/).
 
+   ```bash
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+   source ~/.bashrc
+   nvm install 14
+   nvm use 14
+   ```
+
 2. **Clone Repository**:
    ```bash
    git clone https://github.com/Winnode/IBC-Wallet.git
@@ -25,7 +32,7 @@ A TypeScript script for managing Cosmos wallets, enabling transactions and walle
    ```  
    or
     ```bash  
-   npm install dotenv bip39 @cosmjs/proto-signing @cosmjs/stargate chalk
+   npm install dotenv bip39 @cosmjs/proto-signing @cosmjs/stargate fs readline randombytes base64-arraybuffer
    ``` 
 
 3. **Creat File .env**:
@@ -46,7 +53,7 @@ A TypeScript script for managing Cosmos wallets, enabling transactions and walle
    ```  
    or
     ```bash  
-   npx ts-node index.ts
+   node run
    ``` 
 
 5. **Support (EVM for coffee)**:
