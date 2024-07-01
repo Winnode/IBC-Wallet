@@ -9,7 +9,6 @@ import {
 } from '@cosmjs/stargate';
 import * as fs from 'fs';
 import * as readline from 'readline';
-import chalk from 'chalk';
 
 dotenv.config();
 
@@ -22,7 +21,7 @@ interface Config {
   EXPONENT: number;
   COINGECKO_ID: string;
   RPC: string;
-  PREFIX: string; 
+  PREFIX: string; // Added PREFIX from config.json
 }
 
 const config: Config = require('./config.json');
@@ -36,13 +35,13 @@ const config: Config = require('./config.json');
   while (true) {
     for (const wallet of wallets) {
       const balance = await getBalance(wallet);
-      console.log(chalk.yellow(`${config.PREFIX} Current balance: ${balance / (10 ** config.EXPONENT)} ${config.SYMBOL}`));
+      console.log(`${config.PREFIX} Current balance: ${balance / (10 ** config.EXPONENT)} ${config.SYMBOL}`);
 
       if (choice === '1') {
         if (balance >= config.MIN_TX_FEE) {
           await sendTransaction(wallet, await createReceiveAddress());
         } else {
-          console.log(chalk.red(`${config.PREFIX} Insufficient funds to send transaction.`));
+          console.log(`${config.PREFIX} Insufficient funds to send transaction.`);
         }
       } else if (choice === '2') {
         const recipients = await getRecipientsFromFile('recipients.txt');
@@ -50,7 +49,7 @@ const config: Config = require('./config.json');
           if (balance >= config.MIN_TX_FEE) {
             await sendTransaction(wallet, recipient);
           } else {
-            console.log(chalk.red(`${config.PREFIX} Insufficient funds to send transaction.`));
+            console.log(`${config.PREFIX} Insufficient funds to send transaction.`);
             break;
           }
         }
@@ -59,15 +58,15 @@ const config: Config = require('./config.json');
           const recipient = await createReceiveAddress();
           await sendAllBalance(wallet, recipient);
         } else {
-          console.log(chalk.red(`${config.PREFIX} Insufficient funds to transfer all balance.`));
+          console.log(`${config.PREFIX} Insufficient funds to transfer all balance.`);
         }
       } else if (choice === '4') {
         const numWallets = await getNumberOfWalletsToGenerate();
         await generateWalletsAndSave(numWallets);
       }
     }
-    console.log(`${config.PREFIX} Sleeping for 5 seconds...`);
-    await sleep(5000);
+    console.log(`${config.PREFIX} Sleeping for 30 seconds...`);
+    await sleep(30000);
   }
 })();
 
@@ -134,7 +133,7 @@ async function sendTransaction(wallet: OfflineSigner, recipient: string) {
   const amount = coins(1, config.BASE_COIN);
   const [firstAccount] = await wallet.getAccounts();
 
-  console.log(chalk.green(`${config.PREFIX} Send ${config.SYMBOL} from ${firstAccount.address} to ${recipient}`));
+  console.log(`${config.PREFIX} Send ${config.SYMBOL} from ${firstAccount.address} to ${recipient}`);
 
   try {
     const transaction = await client.sendTokens(
@@ -145,12 +144,12 @@ async function sendTransaction(wallet: OfflineSigner, recipient: string) {
     );
     assertIsDeliverTxSuccess(transaction);
 
-    console.log(chalk.green(`${config.PREFIX} Successfully broadcasted:`, transaction.transactionHash));
+    console.log(`${config.PREFIX} Successfully broadcasted:`, transaction.transactionHash);
   } catch (error) {
     if (error instanceof Error) {
-      console.error(chalk.red(`${config.PREFIX} Failed to send transaction: ${error.message}`));
+      console.error(`${config.PREFIX} Failed to send transaction: ${error.message}`);
     } else {
-      console.error(chalk.red(`${config.PREFIX} Failed to send transaction:`, error));
+      console.error(`${config.PREFIX} Failed to send transaction:`, error);
     }
   }
 }
@@ -168,8 +167,8 @@ async function sendAllBalance(wallet: OfflineSigner, recipient: string) {
   const balance = await getBalance(wallet);
 
   if (balance > config.MIN_TX_FEE) {
-    const amount = coins(balance - config.MIN_TX_FEE, config.BASE_COIN);
-    console.log(chalk.green(`${config.PREFIX} Send all ${config.SYMBOL} from ${firstAccount.address} to ${recipient}`));
+    const amount = coins(balance - config.MIN_TX_FEE, config.BASE_COIN); // Subtract transaction fee
+    console.log(`${config.PREFIX} Send all ${config.SYMBOL} from ${firstAccount.address} to ${recipient}`);
 
     try {
       const transaction = await client.sendTokens(
@@ -180,16 +179,16 @@ async function sendAllBalance(wallet: OfflineSigner, recipient: string) {
       );
       assertIsDeliverTxSuccess(transaction);
 
-      console.log(chalk.green(`${config.PREFIX} Successfully broadcasted:`, transaction.transactionHash));
+      console.log(`${config.PREFIX} Successfully broadcasted:`, transaction.transactionHash);
     } catch (error) {
       if (error instanceof Error) {
-        console.error(chalk.red(`${config.PREFIX} Failed to send all balance: ${error.message}`));
+        console.error(`${config.PREFIX} Failed to send all balance: ${error.message}`);
       } else {
-        console.error(chalk.red(`${config.PREFIX} Failed to send all balance:`, error));
+        console.error(`${config.PREFIX} Failed to send all balance:`, error);
       }
     }
   } else {
-    console.log(chalk.red(`${config.PREFIX} Insufficient funds: ${balance} ${config.SYMBOL} available.`));
+    console.log(`${config.PREFIX} Insufficient funds: ${balance} ${config.SYMBOL} available.`);
   }
 }
 
@@ -211,9 +210,9 @@ async function generateWalletsAndSave(numWallets: number) {
     }
 
     fs.writeFileSync('wallet.json', JSON.stringify(walletsData, null, 2));
-    console.log(chalk.green(`${config.PREFIX} Generated ${numWallets} wallets and saved to wallet.json`));
+    console.log(`${config.PREFIX} Generated ${numWallets} wallets and saved to wallet.json`);
   } catch (error) {
-    console.error(chalk.red(`${config.PREFIX} Failed to generate wallets and save to wallet.json:`, error));
+    console.error(`${config.PREFIX} Failed to generate wallets and save to wallet.json:`, error);
   }
 }
 
@@ -238,8 +237,8 @@ async function sleep(ms: number) {
 
 function banner(): string {
   return `
-  ${chalk.blue('***************************************************')}
-  ${chalk.blue('*')}          ${chalk.yellow('Winsnip Cosmos Wallet Manager')}          ${chalk.blue('*')}
-  ${chalk.blue('***************************************************')}
+  ***************************************************
+  *              ${config.PREFIX} Cosmos Wallet Manager               *
+  ***************************************************
   `;
 }
