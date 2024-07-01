@@ -1,7 +1,8 @@
 # Winsnip Cosmos Wallet Manager
 
 A TypeScript script for managing Cosmos wallets, enabling transactions and wallet generation.
-![Nama Alternatif](https://github.com/Winnode/IBC-Wallet/raw/main/SC.png)
+![Nama Alternatif](https://github.com/Winnode/IBC-Wallet/blob/main/sc.png)
+
 
 ## Features
 
