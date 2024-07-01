@@ -238,7 +238,7 @@ async function sleep(ms: number) {
 function banner(): string {
   return `
   ***************************************************
-  *              ${config.PREFIX} Cosmos Wallet Manager               *
+  * ${config.PREFIX} Winsnip Cosmos Wallet Manager  *
   ***************************************************
   `;
 }
